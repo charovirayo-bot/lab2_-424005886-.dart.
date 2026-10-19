@@ -1,0 +1,82 @@
+import 'dart:io';
+
+class Student {
+  String fullName;
+  String idNumber;
+  List<double> grades;
+
+  Student(this.fullName, this.idNumber, this.grades);
+
+  void displayStudentInfo() {
+    print('\n==============================');
+    print('       STUDENT RECORD         ');
+    print('==============================');
+    print('Full Name : $fullName');
+    print('ID Number : $idNumber');
+  }
+}
+
+String computeGrade(double average) {
+  
+  if (average >= 75) {
+    return 'Passed';
+  } else if (average >= 70) {
+    return 'Conditional';
+  } else {
+    return 'Failed';
+  }
+}
+
+void main() {
+  print('=== University Grade Calculator ===\n');
+
+  stdout.write('Enter full name: ');
+  String fullName = stdin.readLineSync() ?? '';
+
+  stdout.write('Enter ID number: ');
+  String idNumber = stdin.readLineSync() ?? '';
+
+  List<double> subjectGrades = [];
+
+  for (int i = 1; i <= 3; i++) {
+    double? grade;
+
+    while (grade == null || grade < 0 || grade > 100) {
+      stdout.write('Enter grade for subject $i (0-100): ');
+      String input = stdin.readLineSync() ?? '';
+      grade = double.tryParse(input);
+
+      if (grade == null || grade < 0 || grade > 100) {
+        print('Invalid grade. Please enter a number from 0 to 100.');
+      }
+    }
+
+    subjectGrades.add(grade);
+  }
+
+  Student student = Student(fullName, idNumber, subjectGrades);
+  student.displayStudentInfo();
+
+
+  print('\n--- Subject Grades List ---');
+  for (int i = 0; i < student.grades.length; i++) {
+    print('  [Subject ${i + 1}]: ${student.grades[i]}');
+  }
+
+  
+  double sum = 0;
+
+  for (int i = 0; i < student.grades.length; i++) {
+    sum += student.grades[i];
+  }
+
+  double average = sum / student.grades.length;
+
+  
+  String finalStatus = computeGrade(average);
+
+  print('\n--- Computation Summary ---');
+  print('Average Grade : ${average.toStringAsFixed(2)}');
+  print('Final Status  : $finalStatus');
+  print('==============================\n');
+}
